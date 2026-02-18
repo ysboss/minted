@@ -18,7 +18,7 @@ const Layout = () => {
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
                 <div className="sidebar-header">
-                    {isSidebarOpen && <h1 className="logo-text">Finance<span className="text-accent">Logger</span></h1>}
+                    {isSidebarOpen && <h1 className="logo-text">Minted<span className="text-accent">.</span></h1>}
                     <button onClick={toggleSidebar} className="toggle-btn">
                         <Menu size={24} />
                     </button>

@@ -1,13 +1,13 @@
-# Finance Logger - Design Document
+# Minted - Design Document
 
-| Project | Finance Logger |
+| Project | Minted |
 | :--- | :--- |
 | **Date** | 2026-02-13 |
 | **Status** | Completed |
 | **Author** | Antigravity |
 
 ## 1. Overview
-The **Finance Logger** is a personal finance management web application designed to track income and expenses. It features a responsive, premium UI with real-time data visualization. The system is built on a serverless architecture, utilizing Google Sheets as a database and Google Apps Script as the backend API.
+The **Minted** is a personal finance management web application designed to track income and expenses. It features a responsive, premium UI with real-time data visualization. The system is built on a serverless architecture, utilizing Google Sheets as a database and Google Apps Script as the backend API.
 
 ## 2. Architecture
 The system follows a 3-tier architecture:
