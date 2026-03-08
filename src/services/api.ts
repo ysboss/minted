@@ -30,12 +30,31 @@ export const submitTransaction = async (data: TransactionData): Promise<boolean>
     }
 };
 
-export const fetchTransactions = async (): Promise<Transaction[]> => {
+interface FetchTransactionsOptions {
+    type?: 'Income' | 'Expense' | 'All';
+    month?: number; // 1-12
+    year?: number;
+}
+
+export const fetchTransactions = async (options?: FetchTransactionsOptions): Promise<Transaction[]> => {
     try {
-        const { data, error } = await supabase
+        let query = supabase
             .from('transactions')
             .select('*')
             .order('date', { ascending: false });
+
+        if (options?.type && options.type !== 'All') {
+            query = query.eq('type', options.type);
+        }
+
+        if (options?.year && options?.month) {
+            // Calculate start and end dates for the selected month
+            const startDate = new Date(options.year, options.month - 1, 1).toISOString().split('T')[0];
+            const endDate = new Date(options.year, options.month, 0).toISOString().split('T')[0];
+            query = query.gte('date', startDate).lte('date', endDate);
+        }
+
+        const { data, error } = await query;
 
         if (error) {
             console.error("Error fetching transactions:", error);

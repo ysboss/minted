@@ -1,5 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom';
-import { LayoutDashboard, TrendingUp, TrendingDown, Menu } from 'lucide-react';
+import { LayoutDashboard, TrendingUp, TrendingDown, Menu, History as HistoryIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import './Layout.css';
@@ -36,6 +36,10 @@ const Layout = () => {
                     <NavLink to="/expense" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                         <TrendingDown size={24} />
                         {isSidebarOpen && <span>Expense</span>}
+                    </NavLink>
+                    <NavLink to="/history" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                        <HistoryIcon size={24} />
+                        {isSidebarOpen && <span>History</span>}
                     </NavLink>
                 </nav>
             </motion.aside>

@@ -3,6 +3,7 @@ import Layout from './components/layout/Layout';
 import Dashboard from './pages/Dashboard';
 import Income from './pages/Income';
 import Expense from './pages/Expense';
+import History from './pages/History';
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="income" element={<Income />} />
                     <Route path="expense" element={<Expense />} />
+                    <Route path="history" element={<History />} />
                 </Route>
             </Routes>
         </Router>
