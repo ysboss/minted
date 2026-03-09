@@ -21,17 +21,24 @@ const Dashboard = () => {
     }, []);
 
     const handleParseRequested = async (text: string) => {
-        const parsedTransaction = await parseTransactionFromText(text);
+        const parseResult = await parseTransactionFromText(text);
 
-        if (parsedTransaction) {
-            const success = await submitTransaction(parsedTransaction);
-            if (success) {
-                // Refresh the dashboard data
-                await loadData();
-                return true;
-            }
+        if (!parseResult) {
+            return { success: false, message: "AI Parsing failed. Please try again." };
         }
-        return false;
+
+        if (!parseResult.isTransaction || !parseResult.transaction) {
+            return { success: false, message: parseResult.errorReason || "Could not identify a valid transaction." };
+        }
+
+        const success = await submitTransaction(parseResult.transaction);
+        if (success) {
+            // Refresh the dashboard data
+            await loadData();
+            return { success: true };
+        }
+
+        return { success: false, message: "Failed to save transaction to database." };
     };
 
     const stats = useMemo(() => {

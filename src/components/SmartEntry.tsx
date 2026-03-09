@@ -4,7 +4,7 @@ import { Sparkles, Loader2, Plus } from 'lucide-react';
 import './SmartEntry.css';
 
 interface SmartEntryProps {
-    onParseRequested: (text: string) => Promise<boolean>;
+    onParseRequested: (text: string) => Promise<{ success: boolean; message?: string }>;
 }
 
 const SmartEntry = ({ onParseRequested }: SmartEntryProps) => {
@@ -20,14 +20,14 @@ const SmartEntry = ({ onParseRequested }: SmartEntryProps) => {
         setIsParsing(true);
         setSuccessMsg('');
 
-        const success = await onParseRequested(text);
+        const result = await onParseRequested(text);
 
-        if (success) {
+        if (result.success) {
             setText('');
             setSuccessMsg('✨ Transaction added successfully!');
             setTimeout(() => setSuccessMsg(''), 3000);
         } else {
-            setSuccessMsg('❌ Failed to understand that. Try being more specific.');
+            setSuccessMsg(`❌ ${result.message || 'Failed to understand that. Try being more specific.'}`);
             setTimeout(() => setSuccessMsg(''), 4000);
         }
 
