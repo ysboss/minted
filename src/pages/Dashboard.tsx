@@ -1,22 +1,38 @@
 import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useEffect, useState, useMemo } from 'react';
-import { fetchTransactions, Transaction } from '../services/api';
+import { fetchTransactions, submitTransaction, Transaction } from '../services/api';
+import { parseTransactionFromText } from '../services/aiParser';
+import SmartEntry from '../components/SmartEntry';
 
 const Dashboard = () => {
     const [data, setData] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const loadData = async () => {
-            setLoading(true);
-            const transactions = await fetchTransactions();
-            setData(transactions);
-            setLoading(false);
-        };
+    const loadData = async () => {
+        setLoading(true);
+        const transactions = await fetchTransactions();
+        setData(transactions);
+        setLoading(false);
+    };
 
+    useEffect(() => {
         loadData();
     }, []);
+
+    const handleParseRequested = async (text: string) => {
+        const parsedTransaction = await parseTransactionFromText(text);
+
+        if (parsedTransaction) {
+            const success = await submitTransaction(parsedTransaction);
+            if (success) {
+                // Refresh the dashboard data
+                await loadData();
+                return true;
+            }
+        }
+        return false;
+    };
 
     const stats = useMemo(() => {
         let income = 0;
@@ -76,6 +92,8 @@ const Dashboard = () => {
                 </div>
                 {loading && <span style={{ color: 'var(--text-accent)' }}>Syncing...</span>}
             </header>
+
+            <SmartEntry onParseRequested={handleParseRequested} />
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
                 <div className="glass card">
