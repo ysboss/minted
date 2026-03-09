@@ -51,7 +51,7 @@ const SmartEntry = ({ onParseRequested }: SmartEntryProps) => {
                     type="text"
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    placeholder="e.g., 'I spent $50 at Lazy dog tonight for dinner'"
+                    placeholder="e.g., 'Paid $120 for monthly office internet on March 1st'"
                     disabled={isParsing}
                     className="smart-entry-input"
                     autoComplete="off"
