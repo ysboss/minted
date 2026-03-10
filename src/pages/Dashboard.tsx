@@ -67,8 +67,13 @@ const Dashboard = () => {
         const sortedDetails = [...data].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
         sortedDetails.forEach(t => {
-            // Format date as MM-DD or similar for shorter axis labels
-            const dateKey = new Date(t.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+            // Format date as MM-DD or similar for shorter axis labels.
+            // Explicitly map as UTC since 'YYYY-MM-DD' implies UTC when parsed without a time.
+            const dateKey = new Date(t.date).toLocaleDateString(undefined, {
+                month: 'short',
+                day: 'numeric',
+                timeZone: 'UTC'
+            });
 
             if (!grouped[dateKey]) {
                 grouped[dateKey] = { income: 0, expense: 0 };

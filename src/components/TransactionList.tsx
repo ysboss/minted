@@ -180,7 +180,7 @@ const TransactionList = ({ transactions, onUpdate, onDelete }: TransactionListPr
                                     </div>
                                     <div className="transaction-subtitle-row">
                                         <span className="transaction-description">{t.description || 'No description'}</span>
-                                        <span className="transaction-date">{new Date(t.date).toLocaleDateString()}</span>
+                                        <span className="transaction-date">{new Date(t.date).toLocaleDateString(undefined, { timeZone: 'UTC' })}</span>
                                     </div>
                                 </div>
                                 <div className="transaction-actions">
