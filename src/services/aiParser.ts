@@ -23,13 +23,9 @@ export const parseTransactionFromText = async (
         return null;
     }
 
-    // Get today's date in YYYY-MM-DD format based on the browser's timezone
-    const today = new Date();
-    // Use local time, to ISO string to strip time, keeping the date slice.
-    // Handling timezone offset gracefully to ensure "today" is the user's today.
-    const tzOffset = today.getTimezoneOffset() * 60000;
-    const localISOTime = (new Date(today.getTime() - tzOffset)).toISOString().slice(0, -1);
-    const currentDateStr = localISOTime.split('T')[0];
+    // Get today's date in YYYY-MM-DD format based on the browser's local timezone.
+    // 'en-CA' cleanly formats as YYYY-MM-DD natively.
+    const currentDateStr = new Date().toLocaleDateString('en-CA');
 
     const prompt = `
         You are a highly accurate financial parsing assistant.
