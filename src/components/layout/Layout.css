@@ -2,7 +2,20 @@
     display: flex;
     width: 100%;
     min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+/* GPU Optimized fixed background to prevent backdrop-filter scroll jank */
+.layout-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     background: radial-gradient(circle at top right, #1e293b, var(--bg-primary));
+    z-index: -1;
 }
 
 .sidebar {
@@ -82,7 +95,6 @@
 .main-content {
     flex: 1;
     padding: 2rem;
-    overflow-y: auto;
 }
 
 @media (max-width: 768px) {
