@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Filter } from 'lucide-react';
-import { fetchTransactions, Transaction } from '../services/api';
+import { fetchTransactions, deleteTransaction, updateTransaction, Transaction } from '../services/api';
 import TransactionList from '../components/TransactionList';
 import './History.css';
 
@@ -17,25 +17,41 @@ const History = () => {
     const [selectedMonth, setSelectedMonth] = useState<number>(currentDate.getMonth() + 1);
     const [selectedYear, setSelectedYear] = useState<number>(currentDate.getFullYear());
 
-    useEffect(() => {
-        const loadTransactions = async () => {
-            setLoading(true);
-            try {
-                const data = await fetchTransactions({
-                    type: filterType,
-                    month: selectedMonth,
-                    year: selectedYear
-                });
-                setTransactions(data);
-            } catch (error) {
-                console.error("Failed to load history", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadTransactions();
+    const loadTransactions = useCallback(async () => {
+        setLoading(true);
+        try {
+            const data = await fetchTransactions({
+                type: filterType,
+                month: selectedMonth,
+                year: selectedYear
+            });
+            setTransactions(data);
+        } catch (error) {
+            console.error("Failed to load history", error);
+        } finally {
+            setLoading(false);
+        }
     }, [filterType, selectedMonth, selectedYear]);
+
+    useEffect(() => {
+        loadTransactions();
+    }, [loadTransactions]);
+
+    const handleDelete = async (id: number) => {
+        const success = await deleteTransaction(id);
+        if (success) {
+            await loadTransactions();
+        }
+        return success;
+    };
+
+    const handleUpdate = async (id: number, data: Partial<Transaction>) => {
+        const success = await updateTransaction(id, data);
+        if (success) {
+            await loadTransactions();
+        }
+        return success;
+    };
 
     const months = [
         "January", "February", "March", "April", "May", "June",
@@ -110,7 +126,11 @@ const History = () => {
                 {loading ? (
                     <div className="loading-state glass">Loading transactions...</div>
                 ) : (
-                    <TransactionList transactions={transactions} />
+                    <TransactionList
+                        transactions={transactions}
+                        onDelete={handleDelete}
+                        onUpdate={handleUpdate}
+                    />
                 )}
             </div>
         </motion.div>

@@ -66,3 +66,39 @@ export const fetchTransactions = async (options?: FetchTransactionsOptions): Pro
         return [];
     }
 };
+
+export const deleteTransaction = async (id: number): Promise<boolean> => {
+    try {
+        const { error } = await supabase
+            .from('transactions')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            console.error("Error deleting transaction:", error);
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error("Unexpected error deleting transaction:", error);
+        return false;
+    }
+};
+
+export const updateTransaction = async (id: number, data: Partial<TransactionData>): Promise<boolean> => {
+    try {
+        const { error } = await supabase
+            .from('transactions')
+            .update(data)
+            .eq('id', id);
+
+        if (error) {
+            console.error("Error updating transaction:", error);
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error("Unexpected error updating transaction:", error);
+        return false;
+    }
+};
